@@ -21,11 +21,31 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
 
     weak open var delegate: FitCustomSearchBarDelegate?
     
-    public var text: String?
-    public var textColor: UIColor!
-    public var textFont: UIFont!
+    public var text: String? {
+        set {
+            self.textField.text = newValue
+        }
+        get {
+            return self.textField.text
+        }
+    }
+    public var textColor: UIColor! {
+        willSet {
+            self.textField.textColor = newValue
+        }
+    }
+    public var textFont: UIFont! {
+        willSet {
+            self.textField.font = newValue
+        }
+    }
     public var prompt: String!
-    public var placeholder: String!
+    public var placeholder: String! {
+        willSet {
+            self.textField.placeholder = newValue
+            self.textField.contentMode = UIViewContentMode.scaleAspectFit
+        }
+    }
     
     public var iconAlignment: SearchBarIconAlignment! {
         willSet {
@@ -33,17 +53,56 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
             self.adjustIconWith(self._iconAlignTemp!)
         }
     }
-    public var placeholderColor: UIColor!
-    public var textFieldColor: UIColor!
+    public var placeholderColor: UIColor! {
+        willSet {
+            if (self.placeholder == nil || self.placeholder == "") {
+                
+            } else {
+                self.textField.attributedPlaceholder = NSAttributedString.init(string: self.placeholder, attributes: [NSAttributedStringKey.foregroundColor: newValue, NSAttributedStringKey.font: self.textField.font!])
+            }
+        }
+    }
+    public var textFieldColor: UIColor! {
+        willSet {
+            self.textField.backgroundColor = newValue
+        }
+    }
     
-//    var inputAccessoryView: UIView?
-//    open var inputView: UIView?
-    public var iconImage: UIImage?
-    public var backgroundImage: UIImage?
+    public var _inputAccessoryView: UIView? {
+        willSet {
+            self.textField.inputAccessoryView = newValue
+        }
+    }
+    
+    public var _inputView: UIView? {
+        willSet {
+            self.textField.inputView = newValue
+        }
+    }
+    
+    public var iconImage: UIImage! {
+        willSet {
+            (self.textField.leftView as! UIImageView).image = newValue
+            self.textField.leftViewMode = UITextFieldViewMode.always
+        }
+    }
+    public var backgroundImage: UIImage? {
+        willSet {
+            self.textField.background = newValue
+        }
+    }
     
     public var hiddenCancelButton: Bool?
-    public var textBorderStyle: UITextBorderStyle?
-    @nonobjc public var keyboardType: UIKeyboardType?
+    public var textBorderStyle: UITextBorderStyle! {
+        willSet {
+            self.textField.borderStyle = newValue
+        }
+    }
+    @nonobjc public var keyboardType: UIKeyboardType! {
+        willSet {
+            self.textField.keyboardType = newValue
+        }
+    }
     
     func isFirstResponder() -> Bool {
         return self.textField.isFirstResponder;
@@ -102,7 +161,6 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
         self.addSubview(self.textField)
         
         self.addObserver(self, forKeyPath: "frame", options: NSKeyValueObservingOptions(rawValue: NSKeyValueObservingOptions.RawValue(UInt8(NSKeyValueObservingOptions.new.rawValue) | UInt8(NSKeyValueObservingOptions.old.rawValue))), context: nil)
-        
     }
     
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -121,11 +179,31 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
             self.textField.frame = CGRect(x: 7, y: 7, width: self.frame.size.width-7*2, height: 30)
             self.textField.textAlignment = .center
             
-            var pp: NSString = NSString(string: (self.placeholder ?? ""))
+            let pString: String = self.placeholder ?? ""
+            let titleSize = pString.size(withAttributes: [NSAttributedStringKey.font: self.textField.font as Any])
             
-            // FIXME: 这里要继续
-            // .....
+            let x = self.textField.frame.size.width * 0.5 - titleSize.width*0.5 - 30
+            if _iconCenterImgV == nil {
+                _iconCenterImgV = UIImageView.init(image: UIImage(named: "123"))
+                _iconCenterImgV?.contentMode = .scaleAspectFit
+                self.textField.addSubview(_iconCenterImgV!)
+            }
             
+            let xx: CGFloat = x>0 ? x : 0
+            
+            _iconCenterImgV!.frame = CGRect(x: xx, y: 0, width: _iconCenterImgV!.frame.size.width, height: _iconCenterImgV!.frame.size.height)
+            _iconCenterImgV!.isHidden = x>0 ? false : true
+            self.textField.leftView = x>0 ? nil : _iconImgV
+            self.textField.leftViewMode = x > 0 ? UITextFieldViewMode.never : UITextFieldViewMode.always
+        } else {
+            _iconCenterImgV?.isHidden = true
+            UIView.animate(withDuration: 1, animations: {
+                self.textField.textAlignment = NSTextAlignment.left
+                self._iconImgV = UIImageView.init(image: UIImage(named: "123"))
+                self._iconImgV?.contentMode = UIViewContentMode.scaleAspectFit;
+                self.textField.leftView = self._iconImgV;
+                self.textField.leftViewMode =  UITextFieldViewMode.always;
+            })
         }
     }
     
