@@ -13,8 +13,27 @@ public enum SearchBarIconAlignment: UInt {
     case center
 }
 
-public protocol FitCustomSearchBarDelegate: UIBarPositioningDelegate {
+@objc public protocol FitCustomSearchBarDelegate: UIBarPositioningDelegate {
+    @objc optional func searchBarShouldBeginEditing(_ searchBar: FitCustomSearchBar) -> Bool // return NO to not become first responder
     
+    @objc optional func searchBarTextDidBeginEditing(_ searchBar: FitCustomSearchBar) // called when text starts editing
+    
+    @objc optional func searchBarShouldEndEditing(_ searchBar: FitCustomSearchBar) -> Bool // return NO to not resign first responder
+    
+    @objc optional func searchBarTextDidEndEditing(_ searchBar: FitCustomSearchBar) // called when text ends editing
+    
+    @objc optional func searchBar(_ searchBar: FitCustomSearchBar, textDidChange searchText: String) // called when text changes (including clear)
+    
+    @objc optional func searchBar(_ searchBar: FitCustomSearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool // called before text changes
+    
+    @objc optional func searchBarSearchButtonClicked(_ searchBar: FitCustomSearchBar) // called when keyboard search button pressed
+    
+  
+    @objc optional func searchBarCancelButtonClicked(_ searchBar: FitCustomSearchBar) // called when cancel button pressed
+    
+    @objc optional func searchBarResultsListButtonClicked(_ searchBar: FitCustomSearchBar) // called when search results button pressed
+    
+    @objc optional func searchBar(_ searchBar: FitCustomSearchBar, selectedScopeButtonIndexDidChange selectedScope: Int)
 }
 
 open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
@@ -215,31 +234,57 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
     
     
     public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if _iconAlignTemp == SearchBarIconAlignment.center {
+            self.iconAlignment = .left
+        }
+        if !self.hiddenCancelButton! {
+            UIView.animate(withDuration: 0.1, animations: {
+                self.cancelButton.isHidden = false
+                self.textField.frame = CGRect(x: 7, y: 7, width: self.cancelButton.frame.origin.x - 7, height: 30)
+            })
+        }
+        
+        
+        self.delegate?.searchBarShouldBeginEditing?(self)
+        
+        
         return true
     }
     
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        
+        self.delegate?.searchBarTextDidBeginEditing?(self)
     }
     
     public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        self.delegate?.searchBarShouldEndEditing?(self)
         return true
     }
     
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        
+        if _iconAlignTemp == SearchBarIconAlignment.left {
+            self.iconAlignment = .center
+        }
+        if !self.hiddenCancelButton! {
+            UIView.animate(withDuration: 0.1, animations: {
+                self.cancelButton.isHidden = true
+                self.textField.frame = CGRect(x: 7, y: 7, width: self.frame.size.width - 7*2, height: 30)
+            })
+        }
+        self.delegate?.searchBarTextDidEndEditing?(self)
     }
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
+        self.delegate?.searchBar?(self, shouldChangeTextIn: range, replacementText: string)
         return true
     }
     
     public func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        self.delegate?.searchBar?(self, textDidChange: "")
         return true
     }
     
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.delegate?.searchBarSearchButtonClicked?(self)
         return true
     }
     
