@@ -117,7 +117,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
         }
     }
     
-    public var hiddenCancelButton: Bool?
+    public var isHiddenCancelButton: Bool?
     public var textBorderStyle: UITextBorderStyle! {
         willSet {
             self.textField.borderStyle = newValue
@@ -182,7 +182,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
 
     private func initView() {
         self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.size.width, height: 44);
-        if self.hiddenCancelButton == nil {
+        if self.isHiddenCancelButton == false {
             self.addSubview(self.cancelButton)
             self.cancelButton.isHidden = true
         }
@@ -243,9 +243,9 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
     
     public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if _iconAlignTemp == FitSearchBarIconAlignment.center {
-            self.iconAlignment = .left
+            self.iconAlignment = FitSearchBarIconAlignment.center
         }
-        if self.hiddenCancelButton == nil {
+        if self.isHiddenCancelButton == false {
             UIView.animate(withDuration: 0.1, animations: {
                 self.cancelButton.isHidden = false
                 self.textField.frame = CGRect(x: 7, y: 7, width: self.cancelButton.frame.origin.x - 7, height: 30)
@@ -270,7 +270,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
         if _iconAlignTemp == FitSearchBarIconAlignment.left {
             self.iconAlignment = .center
         }
-        if self.hiddenCancelButton == nil {
+        if self.isHiddenCancelButton == false {
             UIView.animate(withDuration: 0.1, animations: {
                 self.cancelButton.isHidden = true
                 self.textField.frame = CGRect(x: 7, y: 7, width: self.frame.size.width - 7*2, height: 30)

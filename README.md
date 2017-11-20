@@ -19,6 +19,14 @@ lazy var searchBar: FitCustomSearchBar = {
 }()
 ```
 
+If you do not need the cancelButton, It's ok
+
+just set `isHiddenCancelButton` to true
+
+```swift
+searchBar.isHiddenCancelButton = true
+```
+
 And the protocol
 
 ```swift
