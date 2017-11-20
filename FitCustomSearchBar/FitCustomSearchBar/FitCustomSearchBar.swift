@@ -8,7 +8,7 @@
 
 import UIKit
 
-public enum SearchBarIconAlignment: UInt {
+public enum FitSearchBarIconAlignment: UInt {
     case left
     case center
 }
@@ -67,7 +67,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
         }
     }
     
-    public var iconAlignment: SearchBarIconAlignment! {
+    public var iconAlignment: FitSearchBarIconAlignment! {
         willSet {
             self._iconAlignTemp = newValue
         }
@@ -147,7 +147,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
     
     fileprivate var _iconImgV: UIImageView?
     fileprivate var _iconCenterImgV: UIImageView?
-    fileprivate var _iconAlignTemp: SearchBarIconAlignment?
+    fileprivate var _iconAlignTemp: FitSearchBarIconAlignment?
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -202,8 +202,8 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
         self.delegate?.searchBar!(self, textDidChange: textField.text!)
     }
     
-    func adjustIconWith(_ iconAlignment: SearchBarIconAlignment) {
-        if (self.iconAlignment == SearchBarIconAlignment.center && ((self.text == nil) || self.text?.count == 0) && !self.textField.isFirstResponder) {
+    func adjustIconWith(_ iconAlignment: FitSearchBarIconAlignment) {
+        if (self.iconAlignment == FitSearchBarIconAlignment.center && ((self.text == nil) || self.text?.count == 0) && !self.textField.isFirstResponder) {
             _iconCenterImgV?.isHidden = false
             self.textField.frame = CGRect(x: 7, y: 7, width: self.frame.size.width-7*2, height: 30)
             self.textField.textAlignment = .center
@@ -242,7 +242,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
     }
     
     public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if _iconAlignTemp == SearchBarIconAlignment.center {
+        if _iconAlignTemp == FitSearchBarIconAlignment.center {
             self.iconAlignment = .left
         }
         if self.hiddenCancelButton == nil {
@@ -267,7 +267,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
     }
     
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        if _iconAlignTemp == SearchBarIconAlignment.left {
+        if _iconAlignTemp == FitSearchBarIconAlignment.left {
             self.iconAlignment = .center
         }
         if self.hiddenCancelButton == nil {
