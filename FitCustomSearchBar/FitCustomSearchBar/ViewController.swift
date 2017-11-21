@@ -34,7 +34,7 @@ class ViewController: UIViewController, FitCustomSearchBarDelegate {
     
     lazy var searchBar: FitCustomSearchBar = {
         var searchBar = FitCustomSearchBar.init(frame: CGRect(x: 0, y: UIApplication.shared.statusBarFrame.size.height, width: UIScreen.main.bounds.size.width, height: 44.0))
-        searchBar.iconImage = UIImage(named: "123")
+        searchBar.iconImage = UIImage(named: "searchIcon")
         searchBar.backgroundColor = UIColor.clear
         searchBar.iconAlignment = .center
         searchBar.placeholder = "请输入关键字"

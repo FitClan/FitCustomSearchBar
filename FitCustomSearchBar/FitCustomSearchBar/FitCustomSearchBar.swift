@@ -213,7 +213,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
             
             let x = self.textField.frame.size.width * 0.5 - titleSize.width*0.5 - 30
             if _iconCenterImgV == nil {
-                _iconCenterImgV = UIImageView.init(image: UIImage(named: "123"))
+                _iconCenterImgV = UIImageView.init(image: UIImage(named: "searchIcon"))
                 _iconCenterImgV?.contentMode = .scaleAspectFit
                 self.textField.addSubview(_iconCenterImgV!)
             }
@@ -228,7 +228,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
             _iconCenterImgV?.isHidden = true
             UIView.animate(withDuration: 1, animations: {
                 self.textField.textAlignment = NSTextAlignment.left
-                self._iconImgV = UIImageView.init(image: UIImage(named: "123"))
+                self._iconImgV = UIImageView.init(image: UIImage(named: "searchIcon"))
                 self._iconImgV?.contentMode = UIViewContentMode.scaleAspectFit;
                 self.textField.leftView = self._iconImgV;
                 self.textField.leftViewMode =  UITextFieldViewMode.always;
