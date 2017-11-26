@@ -243,7 +243,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
     
     public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if _iconAlignTemp == FitSearchBarIconAlignment.center {
-            self.iconAlignment = FitSearchBarIconAlignment.center
+            self.iconAlignment = FitSearchBarIconAlignment.left
         }
         if self.isHiddenCancelButton == false {
             UIView.animate(withDuration: 0.1, animations: {

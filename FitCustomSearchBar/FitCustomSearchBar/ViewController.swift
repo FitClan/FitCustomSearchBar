@@ -23,6 +23,10 @@ class ViewController: UIViewController, FitCustomSearchBarDelegate {
         _ = self.searchBar.becomeFirstResponder()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.searchBar.endEditing(true)
+    }
+    
     func initSearchBar() {
         self.navigationItem.titleView = self.searchBar
         if #available(iOS 11.0, *) {
