@@ -29,12 +29,7 @@ public enum FitSearchBarIconAlignment: UInt {
     
     @objc optional func searchBarSearchButtonClicked(_ searchBar: FitCustomSearchBar) // called when keyboard search button pressed
     
-  
     @objc optional func searchBarCancelButtonClicked(_ searchBar: FitCustomSearchBar) // called when cancel button pressed
-    
-    @objc optional func searchBarResultsListButtonClicked(_ searchBar: FitCustomSearchBar) // called when search results button pressed
-    
-    @objc optional func searchBar(_ searchBar: FitCustomSearchBar, selectedScopeButtonIndexDidChange selectedScope: Int)
 }
 
 open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
@@ -205,13 +200,13 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
     func adjustIconWith(_ iconAlignment: FitSearchBarIconAlignment) {
         if (self.iconAlignment == FitSearchBarIconAlignment.center && ((self.text == nil) || self.text?.count == 0) && !self.textField.isFirstResponder) {
             _iconCenterImgV?.isHidden = false
-            self.textField.frame = CGRect(x: 7, y: 7, width: self.frame.size.width-7*2, height: 30)
+            self.textField.frame = CGRect(x: 7, y: 7, width: self.frame.size.width - 7*2, height: 30)
             self.textField.textAlignment = .center
             
             let pString: String = self.placeholder ?? ""
             let titleSize = pString.size(withAttributes: [NSAttributedStringKey.font: self.textField.font as Any])
             
-            let x = self.textField.frame.size.width * 0.5 - titleSize.width*0.5 - 30
+            let x = self.textField.frame.size.width * 0.5 - titleSize.width * 0.5 - 30
             if _iconCenterImgV == nil {
                 _iconCenterImgV = UIImageView.init(image: UIImage(named: "searchIcon"))
                 _iconCenterImgV?.contentMode = .scaleAspectFit
