@@ -112,7 +112,7 @@ open class FitCustomSearchBar: UIView, UITextInputTraits, UITextFieldDelegate {
         }
     }
     
-    public var isHiddenCancelButton: Bool?
+    public var isHiddenCancelButton: Bool = false
     public var textBorderStyle: UITextBorderStyle! {
         willSet {
             self.textField.borderStyle = newValue
